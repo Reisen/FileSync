@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <style>
+            body, html {
+                background-color: #131319;
+                font-family: tahoma;
+                color: #AAA;
+                margin: 0px;
+                padding: 0px;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            .player_wrapper {
+                margin: 10px auto;
+                height: 800px;
+                text-align: center;
+                position: relative;
+            }
+
+            .player_wrapper video {
+                margin: auto;
+                position: absolute;
+                top: 0px;
+                bottom: 0px;
+                left: 0px;
+                right: 0px;
+                width: 1280px;
+                height: 720px;
+                border: 4px solid #212129;
+                background-color: #111;
+            }
+
+            .player_wrapper #state {
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                right: 0px;
+                width: 1280px;
+                padding: 5px;
+                background-color: #212129;
+                margin: 0 auto;
+            }
+
+            #you, #them {
+            }
+
+            #you { float: left; }
+            #them { float: right; }
+            #sync { cursor: pointer; color: #4488CC; }
+        </style>
+    </head>
+    <body>
+        <div class="player_wrapper">
+            <video id="player" width="720" height="480" controls>
+                <source src="/video8.mp4" type="video/mp4"/>
+                Your browser does not support video tags.
+            </video>
+
+            <div id="state">
+                <span id="you">You</span>
+                <span id="them">Them</span>
+                <span id="sync">Sync</span>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        var Video = document.getElementById('player');
+        var You   = document.getElementById('you');
+        var Them  = document.getElementById('them');
+        var Sync  = document.getElementById('sync');
+
+        var Socket = new (function() {
+            var this$ = this;
+            this.sync = new WebSocket('ws://' + window.location.hostname + ':5005/sync');
+
+            /* Define Handlers. */
+            function onOpen() {
+                this$.sync.send('Hello World');
+            }
+
+            function onMessage(e) {
+                var data    = eval(e.data);
+                var command = data[0];
+                var time    = parseFloat(data[1]);
+                switch(command) {
+                    case 'TIME':
+                        Video.currentTime = time;
+                        break;
+
+                    case 'PLAY':
+                        Video.currentTime = time;
+                        Video.play();
+                        break;
+
+                    case 'PAUSE':
+                        Video.currentTime = time;
+                        Video.pause();
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            /* Register Handlers */
+            this.sync.onopen    = onOpen;
+            this.sync.onmessage = onMessage;
+        })();
+
+        var Player = new (function() {
+            var this$  = this;
+            this.video = Video;
+
+            /* Define Handlers. */
+            function onPlay() {
+                var time = this$.video.currentTime;
+                Socket.sync.send('PLAY ' + time);
+            }
+
+            function onPause() {
+                var time = this$.video.currentTime;
+                Socket.sync.send('PAUSE ' + time);
+            }
+
+            function onTick() {
+                var time = this$.video.currentTime;
+                Socket.sync.send('TIME ' + time);
+            }
+
+            /* Register Handlers. */
+            this.video.onplay  = onPlay;
+            this.video.onpause = onPause;
+            this.synchronize = onTick;
+        })();
+
+        Sync.onclick = function() {
+            Player.synchronize();
+        }
+    </script>
+</html>
