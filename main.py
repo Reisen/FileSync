@@ -1,3 +1,5 @@
+import json
+import random
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
@@ -8,16 +10,41 @@ class MainHandler(tornado.web.RequestHandler):
 
 class SyncSocket(tornado.websocket.WebSocketHandler):
     clients = set()
+    states  = dict()
 
-    def check_origin(self, origin): return True
-    def open(self): print('Open');SyncSocket.clients.add(self)
-    def on_close(self): print('Close');SyncSocket.clients.remove(self)
+    def check_origin(self, origin):
+        return True
+
+    def open(self):
+        SyncSocket.clients.add(self)
+
+    def on_close(self):
+        for client in SyncSocket.clients:
+            if client != self:
+                client.write_message(json.dumps({
+                    'command': 'quit',
+                    'state': SyncSocket.states[self]
+                }))
+
+        del SyncSocket.states[self]
+        SyncSocket.clients.remove(self)
 
     def on_message(self, message):
         try:
-            command, *args = message.split(' ')
-            for client in SyncSocket.clients:
-                client.write_message('{}'.format([command] + args))
+            payload = json.loads(message)
+            command = payload.get('command', 'tick')
+
+            if command in ['tick', 'join']:
+                SyncSocket.states[self] = payload.get('state', {})
+                for client in SyncSocket.clients:
+                    client.write_message(message)
+
+                if command == 'join':
+                    for state in SyncSocket.states:
+                        self.write_message(json.dumps({
+                            'command': 'join',
+                            'state': SyncSocket.states[state]
+                        }))
 
         except Exception as e:
             print(e)

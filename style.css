@@ -1,0 +1,178 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:3000|Droid+Sans+Mono|Montez);
+
+* { box-sizing: border-box; }
+
+.cf:before,
+.cf:after {
+    content: " ";
+    display: table;
+}
+
+.cf:after { clear: both; }
+.cf { *zoom: 1; }
+
+body, html {
+    background-color: #080808;
+    font-family: 'Open Sans', tahoma;
+    color: #AAA;
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+}
+
+#logo {
+    display: block;
+    text-align: center;
+    font-size: 42px;
+    font-family: 'Montez';
+    line-height: 70px;
+    height: 70px;
+    color: #7799CC;
+}
+
+.player_wrapper {
+    margin: 0px auto;
+    height: 580px;
+    text-align: center;
+    position: relative;
+    background-color: #121219;
+    border: 1px solid #333349;
+    border-left: 0px;
+    border-right: 0px;
+    z-index: 1;
+    position: relative;
+    background-image: url('http://static.wallpedes.com/wallpaper/wallpapers/wallpapers-ornaments-textures-navy-blue-hd-plus-wallpaper-dark-blue-for-walls-wallpapers-ornaments-textures-navy-hd-plus.jpg');
+    background-position: center 0px;
+}
+
+    .player_wrapper video {
+        margin: auto;
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        width: 960px;
+        height: 540px;
+        background-color: #121219;
+        box-sizing: content-box;
+        border: 1px solid black;
+    }
+
+.chat_wrapper {
+    width: 960px;
+    background-color: #111;
+    margin: 0px auto;
+    z-index: 2;
+    position: relative;
+    height: calc(100% - 650px);
+    margin-top: -1px;
+    background-image: url('http://static.wallpedes.com/wallpaper/wallpapers/wallpapers-ornaments-textures-navy-blue-hd-plus-wallpaper-dark-blue-for-walls-wallpapers-ornaments-textures-navy-hd-plus.jpg');
+    background-position: center -579px;
+    border: 1px solid #333349;
+    border-top: 0px;
+    border-bottom: 0px;
+}
+
+    .chat_wrapper .users {
+        float: right;
+        width: 180px;
+        height: 100%;
+        background: rgba(
+            0,
+            0,
+            0,
+            0.4
+        );
+    }
+
+        .chat_wrapper .users .user {
+            font-size: 13px;
+            line-height: 25px;
+        }
+
+        .chat_wrapper .users .user:hover {
+            cursor: pointer;
+            background: rgba(
+                0,
+                0,
+                0,
+                0.4
+            );
+        }
+
+            .chat_wrapper .users .user > div:first-of-type {
+                padding: 6px 10px;
+            }
+
+            .chat_wrapper .users .user i {
+                width: 15px;
+            }
+
+            .chat_wrapper .users .user span:last-of-type {
+                float: right;
+                font-family: 'Droid Sans Mono';
+                font-size: 11px;
+            }
+
+        .chat_wrapper .users .progress {
+            height: 7px;
+            background-color: #090909;
+            border-right: 160px solid #151527;
+            border-left: 10px solid #449944;
+        }
+
+    .chat_wrapper .chat {
+        height: 100%;
+        float: left;
+        width: 770px;
+    }
+
+        .chat_wrapper .chat .message {
+            margin-bottom: 10px;
+        }
+
+            .chat_wrapper .chat .message .username {
+                padding: 5px;
+                display: block;
+                float: left;
+                width: 110px;
+                margin-left: 10px;
+                border-top: 3px solid black;
+                font-size: 13px;
+                min-height: 25px;
+                background: rgba(
+                    0,
+                    0,
+                    0,
+                    0.6
+                );
+            }
+
+            .chat_wrapper .chat .message .lines {
+                margin-left: 130px;
+                border-top: 3px solid #449944;
+                font-size: 14px;
+                min-height: 25px;
+                background: rgba(
+                    0,
+                    0,
+                    0,
+                    0.6
+                );
+            }
+
+            .chat_wrapper .chat .message:nth-of-type(2n) .lines {
+                border-top: 3px solid #3366AA !important;
+            }
+
+                .chat_wrapper .chat .message .lines p {
+                    padding: 5px;
+                    margin: 0px;
+                    font-size: 13px;
+                    border-bottom: 1px dashed #333;
+                }
+
+                .chat_wrapper .chat .message .lines p:last-of-type {
+                    border-bottom: 0px;
+                }
